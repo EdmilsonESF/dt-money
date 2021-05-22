@@ -32,22 +32,60 @@ const TransactionsContext = createContext<TransactionsContextData>(
 
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [transactionsArray, setTransactionsArray] = useState(
+    [
+      {
+        id: 1,
+        title: 'Venda de carro',
+        type: 'deposit',
+        category: 'Venda',
+        amount: 33000,
+        createdAt: new Date().toDateString()
+      },
+      {
+        id: 2,
+        title: 'Compra de pc',
+        type: 'withdraw',
+        category: 'Pc',
+        amount: 3500,
+        createdAt: new Date().toString()
+      }
+    ]
+  )
 
   useEffect(() => {
-    api.get('/transactions')
-      .then(response => setTransactions(response.data.transactions))
-  }, [])
+    // api.get('/transactions')
+    //   .then(response => setTransactions(response.data.transactions))
+
+    setTransactions(transactionsArray)
+  }, [transactionsArray])
 
   async function createTransaction(transactionInput: TransactionInput) {
-    const response = await api.post('/transactions', {
+    // const response = await api.post('/transactions', {
+    //   ...transactionInput,
+    //   createdAt: new Date(),
+    // })
+    // const { transaction } = response.data
+
+    // setTransactions([
+    //   ...transactions,
+    //   transaction,
+    // ])
+
+    const transaction = {
       ...transactionInput,
-      createdAt: new Date(),
-    })
-    const { transaction } = response.data
+      id: Math.random(),
+      createdAt: new Date().toString(),
+    }
+
+    setTransactionsArray([
+      ...transactionsArray,
+      transaction
+    ])
+    console.log(transactionsArray)
 
     setTransactions([
-      ...transactions,
-      transaction,
+      ...transactionsArray,
     ])
   }
 
